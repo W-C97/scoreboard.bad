@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badminton Scoreboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1b1b1b;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .scoreboard {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 5px solid white;
+            border-radius: 10px;
+            background-color: #111;
+        }
+
+        .title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .clock {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+
+        .teams {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .team {
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: green;
+        }
+
+        .score {
+            font-size: 48px;
+            color: red;
+        }
+
+        .serving {
+            margin: 20px 0;
+            font-size: 20px;
+        }
+
+        .sets {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .controls button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .controls button:hover {
+            background-color: darkgreen;
+        }
+
+        .controls input {
+            padding: 5px;
+            font-size: 16px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="scoreboard">
+        <div class="title">BADMINTON SCOREBOARD</div>
+        <div class="clock" id="clock">09:48</div>
+        <div class="teams">
+            <div class="team">
+                <input type="text" id="teamAName" placeholder="TEAM-A" />
+                <button onclick="updateTeamName('A')">Update Name</button>
+                <div class="team-name" id="teamANameDisplay">TEAM-A</div>
+                <div class="score" id="teamAScore">0</div>
+            </div>
+            <div class="team">
+                <input type="text" id="teamBName" placeholder="TEAM-B" />
+                <button onclick="updateTeamName('B')">Update Name</button>
+                <div class="team-name" id="teamBNameDisplay">TEAM-B</div>
+                <div class="score" id="teamBScore">0</div>
+            </div>
+        </div>
+        <div class="serving">SERVING: <span id="servingTeam">TEAM-B</span></div>
+        <div class="sets">SET: <span id="currentSet">1</span> - <span id="opponentSet">0</span></div>
+        <div class="controls">
+            <button onclick="resetScores()">Reset to 0</button>
+            <button onclick="updateSet(1)">Set 1</button>
+            <button onclick="updateSet(2)">Set 2</button>
+            <button onclick="updateSet(3)">Set 3</button>
+        </div>
+    </div>
+
+    <script>
+        // Update the clock
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Reset scores to 0
+        function resetScores() {
+            document.getElementById('teamAScore').textContent = '0';
+            document.getElementById('teamBScore').textContent = '0';
+        }
+
+        // Update the set
+        function updateSet(setNumber) {
+            document.getElementById('currentSet').textContent = setNumber;
+        }
+
+        // Update team names
+        function updateTeamName(team) {
+            const inputId = team === 'A' ? 'teamAName' : 'teamBName';
+            const displayId = team === 'A' ? 'teamANameDisplay' : 'teamBNameDisplay';
+            const newName = document.getElementById(inputId).value;
+            if (newName) {
+                document.getElementById(displayId).textContent = newName;
+            }
+        }
+
+        // Limit score to a maximum of 21
+        function updateScore(team, increment) {
+            const scoreId = team === 'A' ? 'teamAScore' : 'teamBScore';
+            const currentScore = parseInt(document.getElementById(scoreId).textContent, 10);
+            const newScore = Math.min(21, currentScore + increment);
+            document.getElementById(scoreId).textContent = newScore;
+        }
+
+        // Example to dynamically update scores
+        setTimeout(() => {
+            updateScore('A', 10);
+            updateScore('B', 12);
+        }, 3000);
+    </script>
+</body>
+</html>
